@@ -16,7 +16,7 @@ class profile_nomad (
   Boolean              $manage_sysctl         = true,
   String               $sd_service_name       = 'nomad-ui',
   Array                $sd_service_tags       = [],
-  String               $version               = '0.12.5',
+  String               $version               = '0.12.7',
 ) {
   if $consul_connect {
     include profile_nomad::cni_plugins
