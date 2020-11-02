@@ -44,6 +44,7 @@ class profile_nomad (
       apt::source {'Hashicorp':
         location => 'https://apt.releases.hashicorp.com',
         repos    => 'main',
+      }
     }
   }
   if $manage_firewall_entry {
