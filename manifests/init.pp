@@ -77,7 +77,7 @@ class profile_nomad (
     consul::service { $sd_service_name:
       checks => [
         {
-          http     => "http://${facts['networking']['fqdn']}:4646",
+          http     => "http://${facts['networking']['ip']}:4646",
           interval => '10s'
         }
       ],
