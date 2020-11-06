@@ -54,6 +54,7 @@ class profile_nomad (
     config_hash     => $config,
     version         => $version,
     install_method  => 'package',
+    bin_dir         => '/usr/bin',
   }
   if $manage_firewall_entry {
     firewall { '20000 allow Nomad services':
