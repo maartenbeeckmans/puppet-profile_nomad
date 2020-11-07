@@ -12,7 +12,7 @@ class profile_nomad (
   Boolean              $consul_connect        = false,
   String               $job_port_range        = '20000-32000',
   Boolean              $manage_firewall_entry = true,
-  Boolean              $manage_sd_service     = true,
+  Boolean              $manage_sd_service     = false,
   Boolean              $manage_sysctl         = true,
   String               $sd_service_name       = 'nomad-ui',
   Array                $sd_service_tags       = [],
