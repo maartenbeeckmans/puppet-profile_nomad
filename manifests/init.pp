@@ -1,89 +1,92 @@
 #
 class profile_nomad (
-  Hash $config                                = {},
-  Hash $config_defaults                       = {
-    'consul' => {
-      'address' => '127.0.0.1:8500',
-    },
-    'data_dir'   => '/var/lib/nomad',
-    'datacenter' => 'beeckmans.io',
-  },
-  Stdlib::Absolutepath $config_dir            = '/etc/nomad.d',
-  Boolean              $consul_connect        = false,
-  String               $job_port_range        = '20000-32000',
-  Boolean              $manage_firewall_entry = true,
-  Boolean              $manage_sd_service     = false,
-  Boolean              $manage_sysctl         = true,
-  String               $sd_service_name       = 'nomad-ui',
-  Array                $sd_service_tags       = [],
-  String               $version               = '0.12.7',
-  Boolean              $manage_repo           = true,
-  String               $repo_gpg_key          = 'E8A032E094D8EB4EA189D270DA418C88A3219F7B',
-  Stdlib::HTTPUrl      $repo_gpg_url          = 'https://apt.releases.hashicorp.com/gpg',
-  Stdlib::HTTPUrl      $repo_url              = 'https://apt.releases.hashicorp.com',
+  Boolean              $server,
+  String               $advertise_address,
+  Array[String]        $agent_nodes,
+  String               $alloc_dir,
+  Boolean              $auto_advertise,
+  String               $bind_address,
+  String               $root_ca_file,
+  Optional[String]     $root_ca_cert,
+  Optional[String]     $nomad_cert,
+  Optional[String]     $nomad_key,
+  String               $cert_file,
+  String               $certs_dir,
+  Boolean              $client,
+  Boolean              $client_auto_join,
+  String               $client_service_name,
+  String               $collection_interval,
+  String               $consul_address,
+  Boolean              $consul_ssl,
+  Boolean              $consul_verify_ssl,
+  String               $datacenter,
+  String               $region,
+  String               $data_dir,
+  String               $key_file,
+  String               $log_level,
+  Hash                 $meta,
+  String               $node_name,
+  Hash                 $plugin_config,
+  Boolean              $prometheus_metrics,
+  Boolean              $publish_allocation_metrics,
+  Boolean              $publish_node_metrics,
+  Boolean              $rejoin_after_leave,
+  String               $encrypt_key,
+  Boolean              $server_auto_join,
+  Array[String]        $server_nodes,
+  String               $server_service_name,
+  Boolean              $telemetry_disable_hostname,
+  Boolean              $tls_http,
+  Boolean              $tls_rpc,
+  Hash                 $vault_config,
+  String               $vault_role,
+  String               $vault_token,
+  Boolean              $verify_https_client,
+  Boolean              $verify_server_hostname,
+  Boolean              $verify_ssl,
+  Boolean              $manage_sysctl,
+  String               $cni_plugins_arch,
+  Optional[String]     $cni_plugins_download_url,
+  String               $cni_plugins_download_url_base,
+  String               $cni_plugins_download_extension,
+  String               $cni_plugins_package_name,
+  Enum['none','url']   $cni_plugins_install_method,
+  String               $cni_plugins_version,
+  Stdlib::Absolutepath $config_dir,
+  Boolean              $consul_connect,
+  String               $job_port_range,
+  Boolean              $manage_firewall_entry,
+  Boolean              $manage_sd_service,
+  String               $sd_service_name,
+  Array                $sd_service_tags,
+  String               $version,
+  Boolean              $manage_repo,
+  String               $repo_gpg_key,
+  Stdlib::HTTPUrl      $repo_gpg_url,
+  Stdlib::HTTPUrl      $repo_url,
 ) {
+  if $server {
+    include profile_nomad::server
+  } else {
+    fail('Only nomad server installation is supported atm!')
+  }
+
+  include profile_nomad::certs
+
   if $consul_connect {
     include profile_nomad::cni_plugins
+  }
 
-    if $manage_sysctl {
-      sysctl { 'net.bridge.bridge-nf-call-arptables':
-        ensure => present,
-        value  => '1',
-      }
-      sysctl { 'net.bridge.bridge-nf-call-iptables':
-        ensure => present,
-        value  => '1',
-      }
-    }
-  }
   if $manage_repo {
-    if ! defined(Apt::Source['Hashicorp']) {
-      apt::source { 'Hashicorp':
-        location => $repo_url,
-        repos    => 'main',
-        key      => {
-          id     => $repo_gpg_key,
-          server => $repo_gpg_url,
-        }
-      }
-    }
+    include profile_nomad::repo
   }
-  class { 'nomad':
-    config_defaults => $config_defaults,
-    config_dir      => $config_dir,
-    config_hash     => $config,
-    version         => $version,
-    install_method  => 'package',
-    bin_dir         => '/usr/bin',
-  }
+
   if $manage_firewall_entry {
-    firewall { '20000 allow Nomad services':
-      dport  => [$job_port_range],
-      action => 'accept',
-    }
-    firewall { '04646 allow Nomad http':
-      dport  => 4646,
-      action => 'accept',
-    }
-    firewall { '04647 allow Nomad rpc':
-      dport  => 4647,
-      action => 'accept',
-    }
-    firewall { '04648 allow Nomad serf':
-      dport  => 4648,
-      action => 'accept',
-    }
+    include profile_nomad::firewall
   }
-  if $manage_sd_service {
-    consul::service { $sd_service_name:
-      checks => [
-        {
-          http     => "http://${facts['networking']['ip']}:4646",
-          interval => '10s'
-        }
-      ],
-      port   => 4646,
-      tags   => $sd_service_tags,
-    }
+  file { '/etc/profile.d/nomad.sh':
+    ensure  => file,
+    mode    => '0644',
+    content => "export NOMAD_ADDR=https://127.0.0.1:4646\nexport NOMAD_CACERT=${root_ca_file}\n",
   }
 }

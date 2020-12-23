@@ -1,13 +1,24 @@
 #
 class profile_nomad::cni_plugins (
-  String             $arch               = 'amd64',
-  Optional[String]   $download_url       = undef,
-  String             $download_url_base  = 'https://github.com/containernetworking/plugins/releases/download',
-  String             $download_extension = 'tgz',
-  String             $package_name       = 'cni-plugins',
-  Enum['none','url'] $install_method     = 'url',
-  String             $version            = 'v0.8.7',
+  Boolean            $manage_sysctl      = $::profile_nomad::manage_sysctl,
+  String             $arch               = $::profile_nomad::cni_plugins_arch,
+  Optional[String]   $download_url       = $::profile_nomad::cni_plugins_download_url,
+  String             $download_url_base  = $::profile_nomad::cni_plugins_download_url_base,
+  String             $download_extension = $::profile_nomad::cni_plugins_download_extension,
+  String             $package_name       = $::profile_nomad::cni_plugins_package_name,
+  Enum['none','url'] $install_method     = $::profile_nomad::cni_plugins_install_method,
+  String             $version            = $::profile_nomad::cni_plugins_version,
 ) {
+  if $manage_sysctl {
+    sysctl { 'net.bridge.bridge-nf-call-arptables':
+      ensure => present,
+      value  => '1',
+    }
+    sysctl { 'net.bridge.bridge-nf-call-iptables':
+      ensure => present,
+      value  => '1',
+    }
+  }
   case $install_method {
     'url': {
       $install_path = '/opt/cni/bin'

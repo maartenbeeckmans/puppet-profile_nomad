@@ -1,0 +1,74 @@
+---
+profile_nomad::server: true
+profile_nomad::advertise_address: "%{facts.networking.ip}"
+profile_nomad::agent_nodes: []
+profile_nomad::alloc_dir: /var/lib/nomad/alloc
+profile_nomad::auto_advertise: true
+profile_nomad::bind_address: '0.0.0.0'
+profile_nomad::root_ca_file: "%{hiera('profile_nomad::certs_dir')}/root_ca_cert.pem"
+profile_nomad::cert_file: "%{hiera('profile_nomad::certs_dir')}/nomad_cert.pem"
+profile_nomad::certs_dir: '/etc/ssl/certs/nomad'
+profile_nomad::client: true
+profile_nomad::client_auto_join: true
+profile_nomad::client_service_name: 'nomad-agent'
+profile_nomad::collection_interval: '1s'
+profile_nomad::consul_address: "%{facts.networking.fqdn}:8500"
+profile_nomad::consul_ssl: true
+profile_nomad::consul_verify_ssl: true
+profile_nomad::datacenter: 'beeckmans'
+profile_nomad::region: global
+profile_nomad::data_dir: '/var/lib/nomad'
+profile_nomad::key_file: "%{hiera('profile_nomad::certs_dir')}/nomad_key.pem"
+profile_nomad::log_level: 'INFO'
+profile_nomad::meta: {}
+profile_nomad::node_name: "%{facts.networking.fqdn}"
+profile_nomad::plugin_config:
+  docker:
+    args: []
+    config:
+      gc:
+        image: false
+      allow_caps:
+        - 'ALL'
+profile_nomad::prometheus_metrics: true
+profile_nomad::publish_allocation_metrics: true
+profile_nomad::publish_node_metrics: true
+profile_nomad::rejoin_after_leave: true
+profile_nomad::server_auto_join: true
+profile_nomad::server_nodes: []
+profile_nomad::server_service_name: 'nomad'
+profile_nomad::telemetry_disable_hostname: true
+profile_nomad::tls_http: true
+profile_nomad::tls_rpc: true
+profile_nomad::vault_config:
+  address: 'https://vault.service.consul:8200'
+  enabled: true
+  ca_path: "%{hiera('profile_nomad::ca_file')}"
+  cert_file: '/etc/ssl/certs/vault/vault_cert.pem'
+  key_file: '/etc/ssl/certs/vault/vault_key.pem'
+profile_nomad::vault_role: 'nomad-cluster'
+profile_nomad::vault_token: ''
+profile_nomad::verify_https_client: false
+profile_nomad::verify_server_hostname: true
+profile_nomad::verify_ssl: true
+profile_nomad::manage_sysctl: true
+profile_nomad::cni_plugins_arch: 'amd64'
+profile_nomad::cni_plugins_download_url: undef
+profile_nomad::cni_plugins_download_url_base: 'https://github.com/containernetworking/plugins/releases/download'
+profile_nomad::cni_plugins_download_extension: 'tgz'
+profile_nomad::cni_plugins_package_name: 'cni-plugins'
+profile_nomad::cni_plugins_install_method: 'url'
+profile_nomad::cni_plugins_version: 'v0.8.7'
+profile_nomad::config_dir: '/etc/nomad.d'
+profile_nomad::consul_connect: false
+profile_nomad::job_port_range: '20000-32000'
+profile_nomad::manage_firewall_entry: true
+profile_nomad::manage_sd_service: false
+profile_nomad::sd_service_name: 'nomad-ui'
+profile_nomad::sd_service_tags: []
+profile_nomad::version: '1.0.1'
+profile_nomad::manage_repo: true
+profile_nomad::repo_gpg_key: 'E8A032E094D8EB4EA189D270DA418C88A3219F7B'
+profile_nomad::repo_gpg_url: 'https://apt.releases.hashicorp.com/gpg'
+profile_nomad::repo_url: 'https://apt.releases.hashicorp.com'
+...
