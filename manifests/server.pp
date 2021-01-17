@@ -130,8 +130,9 @@ class profile_nomad::server (
     consul::service { $sd_service_name:
       checks => [
         {
-          http     => "http://${advertise_address}:4646",
-          interval => '10s'
+          http            => "https://${advertise_address}:4646",
+          interval        => '10s'
+          tls_skip_verify => true,
         }
       ],
       port   => 4646,
