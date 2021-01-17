@@ -131,7 +131,7 @@ class profile_nomad::server (
       checks => [
         {
           http            => "https://${advertise_address}:4646",
-          interval        => '10s'
+          interval        => '10s',
           tls_skip_verify => true,
         }
       ],
