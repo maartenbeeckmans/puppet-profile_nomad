@@ -1,5 +1,5 @@
 ---
-profile_nomad::server: true
+profile_nomad::server: false
 profile_nomad::advertise_address: "%{facts.networking.ip}"
 profile_nomad::agent_nodes: []
 profile_nomad::alloc_dir: /var/lib/nomad/alloc
@@ -41,11 +41,11 @@ profile_nomad::telemetry_disable_hostname: true
 profile_nomad::tls_http: true
 profile_nomad::tls_rpc: true
 profile_nomad::vault_config:
-  address: 'https://vault.service.consul:8200'
   enabled: true
-  ca_path: "%{hiera('profile_nomad::ca_file')}"
-  cert_file: '/etc/ssl/certs/vault/vault_cert.pem'
-  key_file: '/etc/ssl/certs/vault/vault_key.pem'
+  address: 'https://active.vault.service.beeckmans.consul:8200'
+  ca_path: '/etc/ssl/certs/consul/root_ca_cert.pem'
+  cert_file: '/etc/ssl/certs/consul/consul_cert.pem'
+  key_file: '/etc/ssl/certs/consul/consul_key.pem'
 profile_nomad::vault_role: 'nomad-cluster'
 profile_nomad::vault_token: ''
 profile_nomad::verify_https_client: false
@@ -71,4 +71,5 @@ profile_nomad::manage_repo: true
 profile_nomad::repo_gpg_key: 'E8A032E094D8EB4EA189D270DA418C88A3219F7B'
 profile_nomad::repo_gpg_url: 'https://apt.releases.hashicorp.com/gpg'
 profile_nomad::repo_url: 'https://apt.releases.hashicorp.com'
+profile_nomad::nomad_backup: true
 ...

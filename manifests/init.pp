@@ -64,11 +64,12 @@ class profile_nomad (
   String               $repo_gpg_key,
   Stdlib::HTTPUrl      $repo_gpg_url,
   Stdlib::HTTPUrl      $repo_url,
+  Boolean              $nomad_backup,
 ) {
   if $server {
     include profile_nomad::server
   } else {
-    fail('Only nomad server installation is supported atm!')
+    include profile_nomad::agent
   }
 
   include profile_nomad::certs
@@ -88,5 +89,8 @@ class profile_nomad (
     ensure  => file,
     mode    => '0644',
     content => "export NOMAD_ADDR=https://127.0.0.1:4646\nexport NOMAD_CACERT=${root_ca_file}\n",
+  }
+  if $nomad_backup {
+    include profile_nomad::backup
   }
 }

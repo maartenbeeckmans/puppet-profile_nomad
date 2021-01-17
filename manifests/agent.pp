@@ -1,7 +1,7 @@
 #
 #
 #
-class profile_nomad::server (
+class profile_nomad::agent (
   String               $advertise_address          = $::profile_nomad::advertise_address,
   Array[String]        $agent_nodes                = $::profile_nomad::agent_nodes,
   String               $alloc_dir                  = $::profile_nomad::alloc_dir,
@@ -30,46 +30,31 @@ class profile_nomad::server (
   Boolean              $prometheus_metrics         = $::profile_nomad::prometheus_metrics,
   Boolean              $publish_allocation_metrics = $::profile_nomad::publish_allocation_metrics,
   Boolean              $publish_node_metrics       = $::profile_nomad::publish_node_metrics,
-  Boolean              $rejoin_after_leave         = $::profile_nomad::rejoin_after_leave,
-  String               $encrypt_key                = $::profile_nomad::encrypt_key,
-  Boolean              $server_auto_join           = $::profile_nomad::server_auto_join,
   Array[String]        $server_nodes               = $::profile_nomad::server_nodes,
-  String               $server_service_name        = $::profile_nomad::server_service_name,
   Boolean              $telemetry_disable_hostname = $::profile_nomad::telemetry_disable_hostname,
   Boolean              $tls_http                   = $::profile_nomad::tls_http,
   Boolean              $tls_rpc                    = $::profile_nomad::tls_rpc,
   Hash                 $vault_config               = $::profile_nomad::vault_config,
-  String               $vault_role                 = $::profile_nomad::vault_role,
-  String               $vault_token                = $::profile_nomad::vault_token,
   Boolean              $verify_https_client        = $::profile_nomad::verify_https_client,
   Boolean              $verify_server_hostname     = $::profile_nomad::verify_server_hostname,
   Boolean              $verify_ssl                 = $::profile_nomad::verify_ssl,
   Stdlib::Absolutepath $config_dir                 = $::profile_nomad::config_dir,
   String               $version                    = $::profile_nomad::version,
-  Boolean              $manage_sd_service          = $::profile_nomad::manage_sd_service,
-  String               $sd_service_name            = $::profile_nomad::sd_service_name,
-  Array                $sd_service_tags            = $::profile_nomad::sd_service_tags,
-) {
-  $_extra_vault_config = {
-    token            => $vault_token,
-    create_from_role => $vault_role,
-  }
-
-  $_vault_config = deep_merge($vault_config, $_extra_vault_config)
+){
   $_config_hash = {
-    advertise   => {
+    advertise  => {
       http => $advertise_address,
       rpc  => $advertise_address,
       serf => $advertise_address,
     },
-    bind_addr   => $bind_address,
-    client      => {
+    bind_addr  => $bind_address,
+    client     => {
       alloc_dir => $alloc_dir,
       enabled   => $client,
       meta      => $meta,
       servers   => $server_nodes,
     },
-    consul      => {
+    consul     => {
       address             => $consul_address,
       auto_advertise      => $auto_advertise,
       ca_file             => $consul_root_ca_file,
@@ -77,35 +62,23 @@ class profile_nomad::server (
       client_auto_join    => $client_auto_join,
       client_service_name => $client_service_name,
       key_file            => $consul_key_file,
-      server_auto_join    => $server_auto_join,
-      server_service_name => $server_service_name,
       ssl                 => $consul_ssl,
       verify_ssl          => $verify_ssl,
     },
-    datacenter  => $datacenter,
-    region      => $region,
-    data_dir    => $data_dir,
-    log_level   => $log_level,
-    name        => $node_name,
-    plugin      => $plugin_config,
-    server      => {
-      bootstrap_expect   => size($server_nodes),
-      data_dir           => $data_dir,
-      enabled            => true,
-      rejoin_after_leave => $rejoin_after_leave,
-      encrypt            => $encrypt_key,
-    },
-    server_join => {
-      retry_join => concat($server_nodes, $agent_nodes),
-    },
-    telemetry   => {
+    datacenter => $datacenter,
+    region     => $region,
+    data_dir   => $data_dir,
+    log_level  => $log_level,
+    name       => $node_name,
+    plugin     => $plugin_config,
+    telemetry  => {
       collection_interval        => $collection_interval,
       disable_hostname           => $telemetry_disable_hostname,
       prometheus_metrics         => $prometheus_metrics,
       publish_allocation_metrics => $publish_allocation_metrics,
       publish_node_metrics       => $publish_node_metrics,
     },
-    tls         => {
+    tls        => {
       ca_file                => $root_ca_file,
       cert_file              => $cert_file,
       http                   => $tls_http,
@@ -114,9 +87,8 @@ class profile_nomad::server (
       verify_https_client    => $verify_https_client,
       verify_server_hostname => $verify_server_hostname,
     },
-    vault       => $_vault_config,
+    vault      => $vault_config,
   }
-  # Add in config hash when vault is set up
 
   class { 'nomad':
     config_dir     => $config_dir,
@@ -124,18 +96,5 @@ class profile_nomad::server (
     version        => $version,
     install_method => 'package',
     bin_dir        => '/usr/bin',
-  }
-
-  if $manage_sd_service {
-    consul::service { $sd_service_name:
-      checks => [
-        {
-          http     => "http://${advertise_address}:4646",
-          interval => '10s'
-        }
-      ],
-      port   => 4646,
-      tags   => $sd_service_tags,
-    }
   }
 }
