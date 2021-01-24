@@ -2,7 +2,6 @@
 class profile_nomad (
   Boolean              $server,
   String               $advertise_address,
-  Array[String]        $agent_nodes,
   String               $alloc_dir,
   Boolean              $auto_advertise,
   String               $bind_address,
@@ -33,7 +32,6 @@ class profile_nomad (
   Boolean              $rejoin_after_leave,
   String               $encrypt_key,
   Boolean              $server_auto_join,
-  Array[String]        $server_nodes,
   String               $server_service_name,
   Boolean              $telemetry_disable_hostname,
   Boolean              $tls_http,

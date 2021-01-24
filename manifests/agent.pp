@@ -3,7 +3,6 @@
 #
 class profile_nomad::agent (
   String               $advertise_address          = $::profile_nomad::advertise_address,
-  Array[String]        $agent_nodes                = $::profile_nomad::agent_nodes,
   String               $alloc_dir                  = $::profile_nomad::alloc_dir,
   Boolean              $auto_advertise             = $::profile_nomad::auto_advertise,
   String               $bind_address               = $::profile_nomad::bind_address,
@@ -30,7 +29,6 @@ class profile_nomad::agent (
   Boolean              $prometheus_metrics         = $::profile_nomad::prometheus_metrics,
   Boolean              $publish_allocation_metrics = $::profile_nomad::publish_allocation_metrics,
   Boolean              $publish_node_metrics       = $::profile_nomad::publish_node_metrics,
-  Array[String]        $server_nodes               = $::profile_nomad::server_nodes,
   Boolean              $telemetry_disable_hostname = $::profile_nomad::telemetry_disable_hostname,
   Boolean              $tls_http                   = $::profile_nomad::tls_http,
   Boolean              $tls_rpc                    = $::profile_nomad::tls_rpc,
@@ -41,6 +39,9 @@ class profile_nomad::agent (
   Stdlib::Absolutepath $config_dir                 = $::profile_nomad::config_dir,
   String               $version                    = $::profile_nomad::version,
 ){
+  $_server_results = puppetdb_query("resources[certname] { type=\"Class\" and title = \"Profile_nomad::Server\" }")
+  $_server_nodes = sort($_server_results.map | $result | { "${result['certname']}:4647" })
+
   $_config_hash = {
     advertise  => {
       http => $advertise_address,
@@ -52,7 +53,7 @@ class profile_nomad::agent (
       alloc_dir => $alloc_dir,
       enabled   => $client,
       meta      => $meta,
-      servers   => $server_nodes,
+      servers   => $_server_nodes,
     },
     consul     => {
       address             => $consul_address,

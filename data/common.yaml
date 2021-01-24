@@ -1,7 +1,6 @@
 ---
 profile_nomad::server: false
 profile_nomad::advertise_address: "%{facts.networking.ip}"
-profile_nomad::agent_nodes: []
 profile_nomad::alloc_dir: /var/lib/nomad/alloc
 profile_nomad::auto_advertise: true
 profile_nomad::bind_address: '0.0.0.0'
@@ -35,7 +34,6 @@ profile_nomad::publish_allocation_metrics: true
 profile_nomad::publish_node_metrics: true
 profile_nomad::rejoin_after_leave: true
 profile_nomad::server_auto_join: true
-profile_nomad::server_nodes: []
 profile_nomad::server_service_name: 'nomad'
 profile_nomad::telemetry_disable_hostname: true
 profile_nomad::tls_http: true

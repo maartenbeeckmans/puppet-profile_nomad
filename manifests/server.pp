@@ -3,7 +3,6 @@
 #
 class profile_nomad::server (
   String               $advertise_address          = $::profile_nomad::advertise_address,
-  Array[String]        $agent_nodes                = $::profile_nomad::agent_nodes,
   String               $alloc_dir                  = $::profile_nomad::alloc_dir,
   Boolean              $auto_advertise             = $::profile_nomad::auto_advertise,
   String               $bind_address               = $::profile_nomad::bind_address,
@@ -33,7 +32,6 @@ class profile_nomad::server (
   Boolean              $rejoin_after_leave         = $::profile_nomad::rejoin_after_leave,
   String               $encrypt_key                = $::profile_nomad::encrypt_key,
   Boolean              $server_auto_join           = $::profile_nomad::server_auto_join,
-  Array[String]        $server_nodes               = $::profile_nomad::server_nodes,
   String               $server_service_name        = $::profile_nomad::server_service_name,
   Boolean              $telemetry_disable_hostname = $::profile_nomad::telemetry_disable_hostname,
   Boolean              $tls_http                   = $::profile_nomad::tls_http,
@@ -50,6 +48,12 @@ class profile_nomad::server (
   String               $sd_service_name            = $::profile_nomad::sd_service_name,
   Array                $sd_service_tags            = $::profile_nomad::sd_service_tags,
 ) {
+  $_server_results = puppetdb_query("resources[certname] { type=\"Class\" and title = \"Profile_nomad::Server\" }")
+  $_server_nodes = sort($_server_results.map | $result | { "${result['certname']}:4647" })
+  $_agent_results = puppetdb_query("resources[certname] { type=\"Class\" and title = \"Profile_nomad::Agent\" }")
+  $_agent_nodes = sort($_agent_results.map | $result | { "${result['certname']}:4647" })
+
+
   $_extra_vault_config = {
     token            => $vault_token,
     create_from_role => $vault_role,
@@ -67,7 +71,7 @@ class profile_nomad::server (
       alloc_dir => $alloc_dir,
       enabled   => $client,
       meta      => $meta,
-      servers   => $server_nodes,
+      servers   => $_server_nodes,
     },
     consul      => {
       address             => $consul_address,
@@ -89,14 +93,14 @@ class profile_nomad::server (
     name        => $node_name,
     plugin      => $plugin_config,
     server      => {
-      bootstrap_expect   => size($server_nodes),
+      bootstrap_expect   => size($_server_nodes),
       data_dir           => $data_dir,
       enabled            => true,
       rejoin_after_leave => $rejoin_after_leave,
       encrypt            => $encrypt_key,
     },
     server_join => {
-      retry_join => concat($server_nodes, $agent_nodes),
+      retry_join => concat($_server_nodes, $_agent_nodes),
     },
     telemetry   => {
       collection_interval        => $collection_interval,
