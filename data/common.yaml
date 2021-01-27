@@ -29,6 +29,9 @@ profile_nomad::plugin_config:
         image: false
       allow_caps:
         - 'ALL'
+      volumes:
+        enabled: true
+        selinuxlabel: 'z'
 profile_nomad::prometheus_metrics: true
 profile_nomad::publish_allocation_metrics: true
 profile_nomad::publish_node_metrics: true
