@@ -25,13 +25,13 @@ profile_nomad::plugin_config:
   docker:
     args: []
     config:
+      allow_privileged: true
       gc:
-        image: false
-      allow_caps:
-        - 'ALL'
+        image: true
       volumes:
         enabled: true
-        selinuxlabel: 'z'
+      allow_caps:
+        - 'ALL'
 profile_nomad::prometheus_metrics: true
 profile_nomad::publish_allocation_metrics: true
 profile_nomad::publish_node_metrics: true
