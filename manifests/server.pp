@@ -24,6 +24,7 @@ class profile_nomad::server (
   String               $key_file                   = $::profile_nomad::key_file,
   String               $log_level                  = $::profile_nomad::log_level,
   Hash                 $meta                       = $::profile_nomad::meta,
+  String               $network_iface              = $::profile_nomad::network_iface,
   String               $node_name                  = $::profile_nomad::node_name,
   Hash                 $plugin_config              = $::profile_nomad::plugin_config,
   Boolean              $prometheus_metrics         = $::profile_nomad::prometheus_metrics,
@@ -68,10 +69,11 @@ class profile_nomad::server (
     },
     bind_addr   => $bind_address,
     client      => {
-      alloc_dir => $alloc_dir,
-      enabled   => $client,
-      meta      => $meta,
-      servers   => $_server_nodes,
+      alloc_dir         => $alloc_dir,
+      enabled           => $client,
+      meta              => $meta,
+      network_interface => $network_iface,
+      servers           => $_server_nodes,
     },
     consul      => {
       address             => $consul_address,
@@ -120,7 +122,6 @@ class profile_nomad::server (
     },
     vault       => $_vault_config,
   }
-  # Add in config hash when vault is set up
 
   class { 'nomad':
     config_dir     => $config_dir,

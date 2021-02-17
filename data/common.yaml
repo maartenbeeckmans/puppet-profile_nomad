@@ -20,6 +20,7 @@ profile_nomad::data_dir: '/var/lib/nomad'
 profile_nomad::key_file: "%{hiera('profile_nomad::certs_dir')}/nomad_key.pem"
 profile_nomad::log_level: 'INFO'
 profile_nomad::meta: {}
+profile_nomad::network_iface: "%{facts.networking.primary}"
 profile_nomad::node_name: "%{facts.networking.fqdn}"
 profile_nomad::plugin_config:
   docker:

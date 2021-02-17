@@ -24,6 +24,7 @@ class profile_nomad (
   String               $key_file,
   String               $log_level,
   Hash                 $meta,
+  String               $network_iface,
   String               $node_name,
   Hash                 $plugin_config,
   Boolean              $prometheus_metrics,
