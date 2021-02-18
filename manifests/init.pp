@@ -60,9 +60,6 @@ class profile_nomad (
   Array                $sd_service_tags,
   String               $version,
   Boolean              $manage_repo,
-  String               $repo_gpg_key,
-  Stdlib::HTTPUrl      $repo_gpg_url,
-  Stdlib::HTTPUrl      $repo_url,
   Boolean              $nomad_backup,
 ) {
   if $server {
@@ -75,10 +72,6 @@ class profile_nomad (
 
   if $consul_connect {
     include profile_nomad::cni_plugins
-  }
-
-  if $manage_repo {
-    include profile_nomad::repo
   }
 
   if $manage_firewall_entry {

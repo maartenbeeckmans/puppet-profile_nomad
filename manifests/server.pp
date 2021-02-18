@@ -44,6 +44,7 @@ class profile_nomad::server (
   Boolean              $verify_server_hostname     = $::profile_nomad::verify_server_hostname,
   Boolean              $verify_ssl                 = $::profile_nomad::verify_ssl,
   Stdlib::Absolutepath $config_dir                 = $::profile_nomad::config_dir,
+  Boolean              $manage_repo                = $::profile_nomad::manage_repo,
   String               $version                    = $::profile_nomad::version,
   Boolean              $manage_sd_service          = $::profile_nomad::manage_sd_service,
   String               $sd_service_name            = $::profile_nomad::sd_service_name,
@@ -129,6 +130,7 @@ class profile_nomad::server (
     version        => $version,
     install_method => 'package',
     bin_dir        => '/usr/bin',
+    manage_repo    => $manage_repo,
   }
 
   if $manage_sd_service {

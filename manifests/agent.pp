@@ -38,6 +38,7 @@ class profile_nomad::agent (
   Boolean              $verify_server_hostname     = $::profile_nomad::verify_server_hostname,
   Boolean              $verify_ssl                 = $::profile_nomad::verify_ssl,
   Stdlib::Absolutepath $config_dir                 = $::profile_nomad::config_dir,
+  Boolean              $manage_repo                = $::profile_nomad::manage_repo,
   String               $version                    = $::profile_nomad::version,
 ){
   $_server_results = puppetdb_query("resources[certname] { type=\"Class\" and title = \"Profile_nomad::Server\" }")
@@ -99,5 +100,6 @@ class profile_nomad::agent (
     version        => $version,
     install_method => 'package',
     bin_dir        => '/usr/bin',
+    manage_repo    => $manage_repo,
   }
 }
