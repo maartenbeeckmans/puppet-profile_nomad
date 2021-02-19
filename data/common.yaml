@@ -4,8 +4,8 @@ profile_nomad::advertise_address: "%{facts.networking.ip}"
 profile_nomad::alloc_dir: /var/lib/nomad/alloc
 profile_nomad::auto_advertise: true
 profile_nomad::bind_address: '0.0.0.0'
-profile_nomad::root_ca_file: "%{lookup('profile_nomad::certs_dir', String, first, '')}/root_ca_cert.pem"
-profile_nomad::cert_file: "%{lookup('profile_nomad::certs_dir', String, first, '')}/nomad_cert.pem"
+profile_nomad::root_ca_file: "%{hiera('profile_nomad::certs_dir')}/root_ca_cert.pem"
+profile_nomad::cert_file: "%{hiera('profile_nomad::certs_dir')}/nomad_cert.pem"
 profile_nomad::certs_dir: '/etc/ssl/certs/nomad'
 profile_nomad::client: true
 profile_nomad::client_auto_join: true
@@ -17,7 +17,7 @@ profile_nomad::consul_verify_ssl: true
 profile_nomad::datacenter: 'beeckmans'
 profile_nomad::region: global
 profile_nomad::data_dir: '/var/lib/nomad'
-profile_nomad::key_file: "%{lookup('profile_nomad::certs_dir', String, first, '')}/nomad_key.pem"
+profile_nomad::key_file: "%{hiera('profile_nomad::certs_dir')}/nomad_key.pem"
 profile_nomad::log_level: 'INFO'
 profile_nomad::meta: {}
 profile_nomad::network_iface: "%{facts.networking.primary}"
