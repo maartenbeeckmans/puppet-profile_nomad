@@ -45,7 +45,6 @@ class profile_nomad (
   Boolean              $verify_ssl,
   Boolean              $manage_sysctl,
   String               $cni_plugins_arch,
-  Optional[String]     $cni_plugins_download_url,
   String               $cni_plugins_download_url_base,
   String               $cni_plugins_download_extension,
   String               $cni_plugins_package_name,
@@ -61,6 +60,7 @@ class profile_nomad (
   String               $version,
   Boolean              $manage_repo,
   Boolean              $nomad_backup,
+  Optional[String]     $cni_plugins_download_url = undef,
 ) {
   if $server {
     include profile_nomad::server
