@@ -55,13 +55,13 @@ class profile_nomad (
   Boolean              $consul_connect,
   String               $job_port_range,
   Boolean              $manage_firewall_entry,
-  Boolean              $manage_sd_service,
   String               $sd_service_name,
   Array                $sd_service_tags,
   String               $version,
   Boolean              $manage_repo,
   Boolean              $nomad_backup,
-  Optional[String]     $cni_plugins_download_url = undef,
+  Optional[String]     $cni_plugins_download_url,
+  Boolean              $manage_sd_service        =lookup('manage_sd_service', Boolean, first, true),
 ) {
   if $server {
     include profile_nomad::server

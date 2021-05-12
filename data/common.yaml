@@ -74,4 +74,5 @@ profile_nomad::sd_service_tags: []
 profile_nomad::version: '1.0.1'
 profile_nomad::manage_repo: true
 profile_nomad::nomad_backup: true
+profile_nomad::cni_plugins_download_url: ~
 ...
