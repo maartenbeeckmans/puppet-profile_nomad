@@ -19,7 +19,7 @@ profile_nomad::consul_address: "%{facts.networking.fqdn}:8500"
 profile_nomad::consul_ssl: true
 profile_nomad::consul_verify_ssl: true
 profile_nomad::datacenter: 'beeckmans'
-profile_nomad::region: global
+profile_nomad::region: 'beeckmans'
 profile_nomad::data_dir: '/var/lib/nomad'
 profile_nomad::key_file: "%{hiera('profile_nomad::certs_dir')}/nomad_key.pem"
 profile_nomad::log_level: 'INFO'
@@ -71,7 +71,7 @@ profile_nomad::manage_firewall_entry: true
 profile_nomad::manage_sd_service: false
 profile_nomad::sd_service_name: 'nomad-ui'
 profile_nomad::sd_service_tags: []
-profile_nomad::version: '1.0.1'
+profile_nomad::version: '1.0.5'
 profile_nomad::manage_repo: true
 profile_nomad::nomad_backup: true
 profile_nomad::cni_plugins_download_url: ~
