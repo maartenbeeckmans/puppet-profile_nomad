@@ -6,6 +6,7 @@ class profile_nomad (
   Boolean              $auto_advertise,
   String               $bind_address,
   String               $root_ca_file,
+  Boolean              $use_puppet_certs,
   Optional[String]     $root_ca_cert,
   Optional[String]     $nomad_cert,
   Optional[String]     $nomad_key,

@@ -7,6 +7,10 @@ profile_nomad::bind_address: '0.0.0.0'
 profile_nomad::root_ca_file: "%{hiera('profile_nomad::certs_dir')}/root_ca_cert.pem"
 profile_nomad::cert_file: "%{hiera('profile_nomad::certs_dir')}/nomad_cert.pem"
 profile_nomad::certs_dir: '/etc/ssl/certs/nomad'
+profile_nomad::use_puppet_certs: true
+profile_nomad::root_ca_cert: ~
+profile_nomad::nomad_cert: ~
+profile_nomad::nomad_key: ~
 profile_nomad::client: true
 profile_nomad::client_auto_join: true
 profile_nomad::client_service_name: 'nomad-agent'
