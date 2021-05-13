@@ -71,7 +71,7 @@ profile_nomad::manage_firewall_entry: true
 profile_nomad::manage_sd_service: false
 profile_nomad::sd_service_name: 'nomad-ui'
 profile_nomad::sd_service_tags: []
-profile_nomad::version: '1.0.3'
+profile_nomad::version: '1.0.5'
 profile_nomad::manage_repo: true
 profile_nomad::nomad_backup: true
 profile_nomad::cni_plugins_download_url: ~
