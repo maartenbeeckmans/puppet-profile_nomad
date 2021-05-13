@@ -48,7 +48,7 @@ profile_nomad::tls_http: true
 profile_nomad::tls_rpc: true
 profile_nomad::vault_config:
   enabled: true
-  address: 'https://active.vault.service.beeckmans.consul:8200'
+  address: 'https://active.vault.service.consul:8200'
   ca_path: '/etc/ssl/certs/consul/root_ca_cert.pem'
   cert_file: '/etc/ssl/certs/consul/consul_cert.pem'
   key_file: '/etc/ssl/certs/consul/consul_key.pem'
