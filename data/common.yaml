@@ -75,4 +75,6 @@ profile_nomad::version: '1.0.5'
 profile_nomad::manage_repo: true
 profile_nomad::nomad_backup: true
 profile_nomad::cni_plugins_download_url: ~
+profile_nomad::postgres_databases: {}
+profile_nomad::postgres_collect_tag: 'postgres'
 ...

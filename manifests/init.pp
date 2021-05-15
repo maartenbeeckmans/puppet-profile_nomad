@@ -61,6 +61,8 @@ class profile_nomad (
   Boolean              $manage_repo,
   Boolean              $nomad_backup,
   Optional[String]     $cni_plugins_download_url,
+  Hash                 $postgres_databases,
+  String               $postgres_collect_tag,
   Boolean              $manage_sd_service        =lookup('manage_sd_service', Boolean, first, true),
 ) {
   if $server {
@@ -86,4 +88,5 @@ class profile_nomad (
   if $nomad_backup {
     include profile_nomad::backup
   }
+  create_resources(profile_postgres::database, $postgres_databases, { tag => $postgres_collect_tag, })
 }
