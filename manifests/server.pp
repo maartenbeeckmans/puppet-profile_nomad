@@ -133,11 +133,6 @@ class profile_nomad::server (
     manage_repo    => $manage_repo,
   }
 
-  file { "${config_dir}/nomad.env":
-    ensure => present,
-    notify => Service['nomad'],
-  }
-
   if $manage_sd_service {
     consul::service { $sd_service_name:
       checks => [
