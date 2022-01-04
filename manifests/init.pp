@@ -51,6 +51,15 @@ class profile_nomad (
   String               $cni_plugins_package_name,
   Enum['none','url']   $cni_plugins_install_method,
   String               $cni_plugins_version,
+  Boolean              $driver_podman,
+  Enum['none','url']   $driver_podman_install_method,
+  Optional[String]     $driver_podman_download_url,
+  String               $driver_podman_download_url_base,
+  String               $driver_podman_version,
+  String               $driver_podman_package_name,
+  String               $driver_podman_arch,
+  String               $driver_podman_download_extension,
+  Stdlib::Absolutepath $plugin_dir,
   Stdlib::Absolutepath $config_dir,
   Boolean              $consul_connect,
   String               $job_port_range,
@@ -75,6 +84,10 @@ class profile_nomad (
 
   if $consul_connect {
     include profile_nomad::cni_plugins
+  }
+
+  if $driver_podman {
+    include profile_nomad::driver::podman
   }
 
   if $manage_firewall_entry {

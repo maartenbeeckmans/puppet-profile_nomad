@@ -37,6 +37,12 @@ profile_nomad::plugin_config:
         enabled: true
       allow_caps:
         - 'ALL'
+  podman:
+    config:
+      gc:
+        container: true
+      volumes:
+        enabled: true
 profile_nomad::prometheus_metrics: true
 profile_nomad::publish_allocation_metrics: true
 profile_nomad::publish_node_metrics: true
@@ -64,6 +70,14 @@ profile_nomad::cni_plugins_download_extension: 'tgz'
 profile_nomad::cni_plugins_package_name: 'cni-plugins'
 profile_nomad::cni_plugins_install_method: 'url'
 profile_nomad::cni_plugins_version: 'v1.0.1'
+profile_nomad::driver_podman: true
+profile_nomad::driver_podman_install_method: 'url'
+profile_nomad::driver_podman_download_url_base: 'https://releases.hashicorp.com/nomad-driver-podman'
+profile_nomad::driver_podman_version: '0.3.0'
+profile_nomad::driver_podman_package_name: 'nomad-driver-podman'
+profile_nomad::driver_podman_arch: 'amd64'
+profile_nomad::driver_podman_download_extension: 'zip'
+profile_nomad::plugin_dir: "%{hiera('profile_nomad::data_dir')}/plugins"
 profile_nomad::config_dir: '/etc/nomad.d'
 profile_nomad::consul_connect: true
 profile_nomad::job_port_range: '20000-32000'
@@ -75,6 +89,7 @@ profile_nomad::version: '1.2.3'
 profile_nomad::manage_repo: true
 profile_nomad::nomad_backup: true
 profile_nomad::cni_plugins_download_url: ~
+profile_nomad::driver_podman_download_url: ~
 profile_nomad::postgres_databases: {}
 profile_nomad::postgres_collect_tag: 'postgres'
 ...
